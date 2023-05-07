@@ -18,6 +18,7 @@
         $length = $_GET['length'];
         $_SESSION["password"] = generateRndPassword($all, $length);
         
+        
     };
 ?>
 
