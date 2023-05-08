@@ -9,15 +9,30 @@
     $spec = '._-#*=%&$£"!@';
 
     $all = "$upp_case$low_case$num$spec";
-    $no_num = "$upp_case$low_case$spec";
-    $no_spec ="$upp_case$low_case$num";
-    $specNnum_only ="$num$spec";
+    $letters_only ="$upp_case$low_case";
 
     include_once __DIR__ . "/functions/generatePassword.php";
 
     if(isset($_GET['length'])){
         $length = $_GET['length'];
-        $_SESSION["password"] = generateRndPassword($all, $length);
+        $psw_type;
+        //controllo checkbox / filtri
+        $type = $_GET['type'] ?? [];
+        if(count($type) === 0){
+            $psw_type = $all;
+        }else{
+            if(in_array('L', $type)){
+                $psw_type .= $letters_only;
+            }
+            if(in_array('N', $type)){
+                $psw_type .= $num;
+            }
+            if(in_array('S', $type)){
+                $psw_type .= $spec;
+            }
+        }
+        
+        $_SESSION["password"] = generateRndPassword($psw_type, $length);
         header("Location: password.php");
     };
 ?>
@@ -38,6 +53,23 @@
             <label for="length">Lunghezza password :</label>
             <input type="number" name="length" id="length" min="5" value="<?php echo $_GET['length'] ?? '5'?>">
             <input type="submit" value="genera">
+
+            <br>
+            <label for="repat-y">consenti ripetizioni di caratteri: </label>
+            <span>si</span>
+            <input type="radio" name="repeat" id="repeat-y">
+            <span>no</span>
+            <input type="radio" name="repeat" id="repeat-n">
+            <br>
+            <label for="letters">lettere</label>
+            <input type="checkbox" name="type[]" id="letters" value="L">
+            <br>
+            <label for="type[]">numeri</label>
+            <input type="checkbox" name="type[]" id="numbers" value="N">
+            <br>
+            <label for="special">speciali</label>
+            <input type="checkbox" name="type[]" id="special" value="S">
+
             <?php if(isset($_GET['length'])){?>
                     <a href="password.php">visualizza password</a>
             <?php } ?>
