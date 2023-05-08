@@ -1,4 +1,5 @@
-<?php session_start();
+<?php 
+    session_start();
     $_SESSION["Password"] = "";
     
     
@@ -17,8 +18,7 @@
     if(isset($_GET['length'])){
         $length = $_GET['length'];
         $_SESSION["password"] = generateRndPassword($all, $length);
-        
-        
+        header("Location: password.php");
     };
 ?>
 
@@ -36,7 +36,7 @@
         <h1>PASSWORD GENERATOR</h1>
         <form action="index.php" method="GET">
             <label for="length">Lunghezza password :</label>
-            <input type="number" name="length" id="length" min="5" value="5">
+            <input type="number" name="length" id="length" min="5" value="<?php echo $_GET['length'] ?? '5'?>">
             <input type="submit" value="genera">
             <?php if(isset($_GET['length'])){?>
                     <a href="password.php">visualizza password</a>
